@@ -4,6 +4,14 @@ tweets = ["Cloud 23 #Manchester #Hilton @h4yl3ylou @ Cloud 23 https://instagram.
 
 for(var i=0; i < tweets.length; i++) {
   var tweet_sentiment = sentiment(tweets[i])
-  // if comparative (score/total words)) is > 0 = positive, < 0 is negative =, 0 is neutral
-  console.dir(tweet_sentiment['comparative'])
+  // sorting tweets into negative, neutral, and positive
+  if ((tweet_sentiment['comparative']) < 0) {
+    console.dir('Negative: ' + tweet_sentiment['negative'])
+  } else if ('Positive: '+ (tweet_sentiment['comparative']) > 0) {
+    console.dir(tweet_sentiment['positive'])
+  } else {
+    if ((tweet_sentiment['words'].length) >= 1) {
+      console.dir('Neutral: '+ tweet_sentiment['words'])
+    }
+  }
 }
