@@ -1,0 +1,17 @@
+@font-face {
+  font-family: 'Sleepy Time';
+  src: url(fonts/SleepyTime/DK\ Sleepy\ Time.otf);
+}
+
+body {
+  background: black;
+  color: rgba(243, 237, 237, 0.81);
+
+}
+
+h3 {
+  font-family: Sleepy Time;
+  margin-top: 200px;
+  text-align: center;
+  font-size: 100px;
+}
