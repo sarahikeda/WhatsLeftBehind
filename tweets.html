@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+
+
+    <link rel="stylesheet" type="text/css" href="tweets.css">
+    <!-- <script type="text/javascript" src="tweets.js" ></script> -->
+    <title>Tweets</title>
+  </head>
+    <body>
+      <h3 id="tweet">cloud 23</h3>
+    </body>
+</html>
+
+<script type="text/javascript">
+var token_words = [[ '@dickfundy blade' ],
+[ '@gfawkes191 and' ],
+[ 'hate joke' ],
+[ 'revenge' ],
+[ 'the lion' ],
+[ 'mad' ],
+[ 'wonderful' ],
+[ 'promise' ],
+[ '@southg8lad @yogajohn' ],
+[ 'crazy' ],
+[ 'mk was' ],
+[ 'best' ],
+[ 'citybynight manchester' ],
+[ 'brioch and' ],
+[ 'united' ],
+[ 'sweet' ],
+[ '@barneyrednews gutted' ],
+[ 'dangerous' ],
+[ 'please' ]]
+var counter = 0;
+var tweet = document.getElementById("tweet");
+setInterval(change, 1000);
+function change() {
+  if(counter < token_words.length) {
+    console.log(counter);
+    tweet.innerHTML = token_words[counter]
+    counter++;
+  } else {
+    counter = 0;
+  }
+}
+</script>
