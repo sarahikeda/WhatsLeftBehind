@@ -5,6 +5,7 @@ require 'hue'
 require 'launchy'
 require 'pry'
 require 'sentimental'
+require 'rb_lib_text'
 
 class Tweet
 
@@ -36,12 +37,16 @@ class Tweet
     sentiments = @tweets.map {|tweet| @analyzer.sentiment tweet }
   end
 
+  def get_tokens
+    @tweets.map {|tweet| RbLibText.tokens(tweet[0])[0..2] }
+  end
+
 end
 
 class Light
 
-  def initialize(sentiments)
-    @sentiments = sentiments
+  def initialize(tweets)
+    @tweet = tweets
     client = Hue::Client.new
     @light = client.lights.first
   end
@@ -50,7 +55,13 @@ class Light
     @light.on!
     @light.brightness = 250
     # positive hue is 12750, negative hue is 46920
-    @sentiment == :positive ? positive_hue : negative_hue
+    if @sentiment == :positive
+      positive_hue
+    elsif @sentiment == :negative
+      negative_hue
+    else
+      neutral_hue
+    end
   end
 
   def launch_projection
@@ -58,27 +69,36 @@ class Light
   end
 
   def change_projection_tweet(tweet_number)
-    @sentiment = @sentiments[tweet_number]
+    sentiments = @tweet.get_tweets
+    @sentiment = sentiments[tweet_number]
   end
 
   def positive_hue
     @light.hue = 12750
     @light.saturation = 50
+    @light.brightness = 250
   end
 
   def negative_hue
     @light.hue = 46920
     @light.saturation = 250
+    @light.brightness = 250
+  end
+
+  def neutral_hue
+    @light.hue = 12750
+    @light.saturation = 50
+    @light.brightness = 100
   end
 
   def color_loop
     launch_projection
-    tweet_number = [0]
+    tweet_number = 0
     # 30 minutes from now
     end_time = Time.now + 200
     loop do
       if Time.now < end_time
-        sleep 4
+        sleep 2
         change_projection_tweet(tweet_number)
         change_color
         tweet_number +=1
@@ -88,7 +108,19 @@ class Light
 
 end
 
-tweet = Tweet.new('https://twitter.com/search?q=near%3A%22Manchester%2C+England%22+within%3A15mi+since%3A2015-07-02+until%3A2015-07-19&ref_src=twsrc%5Etfw&ref_url=https%3A%2F%2Ftwitter.com%2Fsettings%2Fwidgets%2Fnew%2Fsearch')
-sentiments = tweet.get_tweets
-kitchenLight = Light.new(sentiments)
-# kitchenLight.color_loop
+class Installation
+  def initialize
+    @tweets = Tweet.new('https://twitter.com/search?q=near%3A%22Manchester%2C+England%22+within%3A15mi+since%3A2015-07-02+until%3A2015-07-19&ref_src=twsrc%5Etfw&ref_url=https%3A%2F%2Ftwitter.com%2Fsettings%2Fwidgets%2Fnew%2Fsearch')
+    @tweets.get_tweets
+    @light = Light.new(@tweets)
+  end
+
+  def create_projection
+    @words_from_tweets = @tweets.get_tokens
+    @light.color_loop
+    # Launchy.open("/Users/sarah/Desktop/code/WhatsLeftBehind/tweets.html")
+  end
+end
+
+installation = Installation.new
+installation.create_projection
