@@ -22,12 +22,14 @@ var options = {
 
 var req = https.request(options, function(res) {
   res.setEncoding('utf8');
-  res.on('data', function (chunk) {
-    var $ = cheerio.load(chunk);
-    console.dir($(".TweetTextSize").text());
+  res.on('data', function (content) {
+  scrapePage(content)
   });
 });
 
-req.write('data\n');
-req.write('data\n');
+function scrapePage(content){
+  var $ = cheerio.load(content);
+  console.dir($(".TweetTextSize").text());
+}
+
 req.end();
