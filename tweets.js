@@ -29,7 +29,10 @@ var req = https.request(options, function(res) {
 
 function scrapePage(content){
   var $ = cheerio.load(content);
-  console.dir($(".TweetTextSize").text());
+  var twitter = $(".TweetTextSize").text()
+  if (twitter !== '') {
+    console.dir(twitter)
+  }
 }
 
 req.end();
