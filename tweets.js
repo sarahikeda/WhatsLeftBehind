@@ -1,19 +1,6 @@
 var sentiment = require('sentiment');
 var https = require('https');
 var cheerio = require('cheerio');
-// for(var i=0; i < tweets.length; i++) {
-//   var tweet = tweets[i]
-//   var tweet_sentiment = sentiment(tweet)
-//   console.dir(tweet_sentiment.tokens)
-//   // sorting tweets into negative, neutral, and positive
-//   if ((tweet_sentiment['comparative']) < 0) {
-//     // console.dir('Negative: ' + tweet_sentiment['negative'])
-//   } else if ((tweet_sentiment['comparative']) > 0) {
-//     // console.dir('Positive: ' + tweet_sentiment['positive'])
-//   } else {
-//     // console.dir('Neutral: ' + tweet_sentiment['neutral'])
-//   }
-// }
 
 var options = {
   host: 'twitter.com',
@@ -29,10 +16,20 @@ var req = https.request(options, function(res) {
 
 function scrapePage(content){
   var $ = cheerio.load(content);
-  var twitter = $(".TweetTextSize").text()
-  if (twitter !== '') {
-    console.dir(twitter)
+  var tweet = $(".TweetTextSize").text()
+  if (tweet !== '') {
+    "tweet" + sentimentAnalyze(tweet)
   }
 }
 
+function sentimentAnalyze(tweet){
+  var tweetResults = sentiment(tweet)
+  if ((tweetResults['comparative']) < 0) {
+      console.dir('Negative: ' + tweetResults.tokens)
+  } else if ((tweetResults['comparative']) > 0) {
+      console.dir('Positive: ' + tweetResults.tokens)
+  } else {
+      console.dir('Neutral: ' + tweetResults.tokens)
+  }
+}
 req.end();
